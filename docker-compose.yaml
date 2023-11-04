@@ -1,0 +1,21 @@
+version: '3.9'
+services:
+  db:
+    image: postgres
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: watchmode-gpt
+      POSTGRES_USER: watchmode-gpt
+      POSTGRES_PASSWORD: super-secret-password
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U watchmode-gpt']
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    # Persist database content between runs
+    volumes:
+      - watchmode-gpt-pgdata:/var/lib/postgresql/data
+
+volumes:
+  watchmode-gpt-pgdata:

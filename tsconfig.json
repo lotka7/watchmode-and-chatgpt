@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "target": "es2018",
+    "lib": ["es2018", "esnext.asynciterable", "dom"],
+    "strict": true,
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    "sourceMap": true,
+    "outDir": "dist",
+    "paths": {
+      "common/*": ["./src/common/*"],
+      "middleware/*": ["./src/middleware/*"],
+      "config/*": ["./src/config/*"],
+      "modules/*": ["./src/modules/*"]
+    }
+  },
+  "include": ["./src/**/*"]
+}
