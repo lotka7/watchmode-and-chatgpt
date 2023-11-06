@@ -2,11 +2,10 @@ import { Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import Logger from '../../../common/Logger';
 import TypedHandle from '../../../middlewares/TypedHandle';
+import Description from '../models/Description';
 import MovieService, { FilterOptions } from '../services/MovieService';
 import { ActorInfo } from '../types/Actor';
 import { TitleInfo } from '../types/Title';
-import { v4 as uuidV4 } from 'uuid';
-import Description from '../models/Description';
 
 const logger = Logger(__filename);
 
