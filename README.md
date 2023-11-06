@@ -25,6 +25,7 @@ yarn start:dev
 - /movie/search GET
   - API endpoint that allows searching for a movie or an actor
   - http://localhost:6060/api/v1/movie/search?search=Interstellar&type=movie
+  - search must be uriEncoded like here: Ed%20Wood
 - /movie/description POST
   - generate a short description of the movie with OpenAI's API and save to postgress db as Description
   - http://localhost:6060/api/v1/movie/description?search=Inception&type=movie

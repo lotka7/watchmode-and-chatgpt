@@ -86,7 +86,7 @@ Movie.post(
         if (data.title_results.length === 0) {
           return res
             .status(StatusCodes.NOT_FOUND)
-            .send(`There is no movie. Search for a movie or tv at type param.`);
+            .send(`There is no matching movie.`);
         }
 
         const description = await MovieService.openaiSearch(
@@ -109,7 +109,6 @@ Movie.get(
   '/descriptions',
   TypedHandle<void, string | Description[]>(async (req, res): Promise<any> => {
     // TODO - it can be extended with page, size, orderby
-
     const title = req.query.title as string;
     const year = req.query.year as string;
 
@@ -133,7 +132,7 @@ Movie.get(
         filter,
       });
 
-      // TODO - return total number of descriptions
+      // TODO - return total number of descriptions if it is needed
       return res.status(StatusCodes.OK).send(descriptions);
     } catch (error: any) {
       logger.error(error);

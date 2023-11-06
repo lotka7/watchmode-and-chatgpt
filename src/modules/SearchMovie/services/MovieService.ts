@@ -6,7 +6,6 @@ import { TitleInfo } from '../types/Title';
 import Logger from '../../../common/Logger';
 import { v4 as uuidV4 } from 'uuid';
 import Description from '../models/Description';
-import { getConnection } from 'typeorm/globals';
 import PgDataSource from '../../../data-source';
 import { Brackets } from 'typeorm';
 
@@ -16,12 +15,11 @@ const search = async (
   search: string,
   type: SearchType
 ): Promise<{ title_results: TitleInfo[]; people_results: ActorInfo[] }> => {
-  const searchValue = encodeURIComponent(search);
   const response = await axios.get(config.watchmode.url, {
     params: {
       apiKey: process.env.YOUR_WATCHMODE_API_KEY,
       search_field: 'name',
-      search_value: searchValue,
+      search_value: search,
       types: SearchType[type],
     },
   });
@@ -54,18 +52,22 @@ const openaiSearch = async (
     const description = res.data.choices[0].text;
     const id = uuidV4();
 
-    // TODO - check if it has already been created
+    // TODO - check if it has already been created if it is necessary
     const descriptionEntity = new Description();
     descriptionEntity.id = id;
     descriptionEntity.title = title;
     descriptionEntity.year = year;
     descriptionEntity.description = description;
 
-    await PgDataSource.getRepository(Description).save(descriptionEntity);
+    const desc = await PgDataSource.getRepository(Description).save(
+      descriptionEntity
+    );
+
+    logger.info(`Movie - ${desc.title} has been saved to the database`);
 
     return {
-      id: descriptionEntity.id,
-      description: descriptionEntity.description,
+      id: desc.id,
+      description: desc.description,
     };
   } catch (error: any) {
     logger.error(error);
@@ -99,7 +101,7 @@ const list = async (params: ListParamsType): Promise<Description[]> => {
     const defaultParams: ListParamsType = {
       pagination: {
         page: 1,
-        size: 10,
+        size: 100,
       },
       sort: {
         field: 'description.title',
